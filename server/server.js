@@ -3,6 +3,9 @@ const mongoose = require("mongoose");
 const env = require("dotenv");
 const cors = require("cors");
 
+const userRoutes = require("./routes/userRoute");
+const blogRoutes = require("./routes/blogRoute");
+
 const app = express();
 env.config();
 
@@ -19,6 +22,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
+
+app.use("/api/users", userRoutes);
+app.use("/api/blogs", blogRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
