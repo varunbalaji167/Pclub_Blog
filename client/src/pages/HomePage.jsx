@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import HeroSection from "../components/HeroSection";
 import BlogCard from "../components/BlogCard";
+import Footer from "../components/Footer";
 
 const HomePage = () => {
   const [blogs, setBlogs] = useState([]);
@@ -16,9 +17,9 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div>
+    <div className="dark:bg-black">
       <HeroSection />
-      <div className="container mx-auto p-6">
+      <div className="container  mx-auto p-6">
         <h2 className="text-2xl font-bold mb-6">Latest Blogs</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {blogs.map((blog) => (
@@ -26,6 +27,7 @@ const HomePage = () => {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

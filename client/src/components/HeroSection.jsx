@@ -3,7 +3,7 @@ import pclub from "../assets/pclub.jpeg";
 
 const HeroSection = () => {
   return (
-    <section className="bg-white text-gray-800 text-center py-20 px-6 md:px-10 lg:px-20">
+    <section className="bg-white dark:bg-black text-center py-20 px-6 md:px-10 lg:px-20">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
         {/* Heading */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-pink-500 to-red-400 drop-shadow-lg">
@@ -11,11 +11,11 @@ const HeroSection = () => {
           
         </h1>
         {/* Subheading */}
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-medium mt-4 text-gray-600 drop-shadow-md">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-medium mt-4 text-gray-600 dark:text-gray-100 drop-shadow-md">
           Indian Institute of Technology, Indore
         </h2>
         {/* Description */}
-        <p className="mt-6 text-lg md:text-xl lg:text-2xl leading-relaxed text-gray-500 max-w-3xl mx-auto">
+        <p className="mt-6 text-lg md:text-xl lg:text-2xl leading-relaxed text-gray-500 dark:text-gray-300 max-w-3xl mx-auto">
           A community of passionate programmers and innovators.
         </p>
         {/* Image */}

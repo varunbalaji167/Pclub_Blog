@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import useTheme from "../hooks/useTheme";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation(); // Get current location
+  const { theme, toggleTheme } = useTheme();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -13,12 +15,12 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="bg-white dark:bg-black shadow-md transition">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo Section */}
         <div className="flex items-center space-x-2">
           <img
-            src="/src/assets/lightlogo.png"
+            src={`/src/assets/${theme}logo.png`}
             alt="Logo"
             className="h-12 w-12"
           />
@@ -30,7 +32,9 @@ const Navbar = () => {
           <Link
             to="/"
             className={`py-2 text-lg font-medium transition duration-200 ${
-              isActive("/") ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700 hover:text-blue-500"
+              isActive("/")
+                ? "text-blue-500 border-b-2 border-blue-500"
+                : "text-gray-700 hover:text-blue-500"
             }`}
           >
             Home
@@ -38,7 +42,9 @@ const Navbar = () => {
           <Link
             to="/about"
             className={`py-2 text-lg font-medium transition duration-200 ${
-              isActive("/about") ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700 hover:text-blue-500"
+              isActive("/about")
+                ? "text-blue-500 border-b-2 border-blue-500"
+                : "text-gray-700 hover:text-blue-500"
             }`}
           >
             About
@@ -46,7 +52,9 @@ const Navbar = () => {
           <Link
             to="/projects"
             className={`py-2 text-lg font-medium transition duration-200 ${
-              isActive("/projects") ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700 hover:text-blue-500"
+              isActive("/projects")
+                ? "text-blue-500 border-b-2 border-blue-500"
+                : "text-gray-700 hover:text-blue-500"
             }`}
           >
             Projects
@@ -54,18 +62,29 @@ const Navbar = () => {
           <Link
             to="/contact"
             className={`py-2 text-lg font-medium transition duration-200 ${
-              isActive("/contact") ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700 hover:text-blue-500"
+              isActive("/contact")
+                ? "text-blue-500 border-b-2 border-blue-500"
+                : "text-gray-700 hover:text-blue-500"
             }`}
           >
             Contact Us
           </Link>
+          <div className="flex items-center space-x-4">
+            {/* Button for Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded  flex items-center justify-center"
+            >
+              {theme === "dark" ? "🌞" : "🌙"}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu Toggle Button */}
         <div className="md:hidden">
           <button onClick={toggleMenu} className="focus:outline-none">
             <svg
-              className="w-6 h-6 text-gray-700"
+              className="w-6 h-6 text-gray-700 dark:text-gray-100"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -79,13 +98,21 @@ const Navbar = () => {
               />
             </svg>
           </button>
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded"
+          >
+            {theme === "dark" ? "🌞" : "🌙"}
+          </button>
           {/* Mobile Menu */}
           {isOpen && (
             <div className="absolute top-16 right-4 bg-white border rounded-md shadow-lg z-10 w-48">
               <Link
                 to="/"
                 className={`block px-6 py-3 text-lg transition duration-200 ${
-                  isActive("/") ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"
+                  isActive("/")
+                    ? "text-blue-500 bg-gray-100"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 Home
@@ -93,7 +120,9 @@ const Navbar = () => {
               <Link
                 to="/about"
                 className={`block px-6 py-3 text-lg transition duration-200 ${
-                  isActive("/about") ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"
+                  isActive("/about")
+                    ? "text-blue-500 bg-gray-100"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 About
@@ -101,7 +130,9 @@ const Navbar = () => {
               <Link
                 to="/projects"
                 className={`block px-6 py-3 text-lg transition duration-200 ${
-                  isActive("/projects") ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"
+                  isActive("/projects")
+                    ? "text-blue-500 bg-gray-100"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 Projects
@@ -109,7 +140,9 @@ const Navbar = () => {
               <Link
                 to="/contact"
                 className={`block px-6 py-3 text-lg transition duration-200 ${
-                  isActive("/contact") ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"
+                  isActive("/contact")
+                    ? "text-blue-500 bg-gray-100"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 Contact Us
