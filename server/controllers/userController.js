@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 // To register a new user
 exports.register = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, name } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -16,6 +16,7 @@ exports.register = async (req, res) => {
     const user = new User({
       email,
       password,
+      name,
     });
 
     await user.save();
@@ -23,6 +24,7 @@ exports.register = async (req, res) => {
     const userDetails = {
       id: user._id,
       email: user.email,
+      name: user.name
     };
 
     res.status(201).json({ message: "User registered successfully", user: userDetails });
@@ -49,7 +51,7 @@ exports.login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id, role: user.role },
+      { id: user._id, role: user.role, name:user.name },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -59,6 +61,7 @@ exports.login = async (req, res) => {
       user: {
         _id: user._id,
         email: user.email,
+        name: user.name
       },
       token, // Include the token here
       message: "Login successful",

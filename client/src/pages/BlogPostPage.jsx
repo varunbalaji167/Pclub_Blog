@@ -8,7 +8,7 @@ const BlogPostPage = () => {
 
   useEffect(() => {
     const fetchBlog = async () => {
-      const response = await fetch(`http://localhost:5000/api/blogs/${id}`);
+      const response = await fetch(`http://localhost:3000/api/blogs/${id}`);
       const data = await response.json();
       setBlog(data);
     };
@@ -20,7 +20,7 @@ const BlogPostPage = () => {
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold">{blog.title}</h1>
-      <p className="text-gray-500 mt-2">By {blog.author.username}</p>
+      <p className="text-gray-500 mt-2">By {blog.author}</p>
       <div className="mt-4">
         <p>{blog.content}</p>
       </div>

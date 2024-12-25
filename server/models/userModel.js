@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6,
   },
+  name: {
+    type: String,
+    required: true,
+  }
 });
 
 

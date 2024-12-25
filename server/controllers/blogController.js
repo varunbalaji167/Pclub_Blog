@@ -10,7 +10,8 @@ exports.createBlog = async (req, res) => {
     const blog = await Blog.create({
       title,
       content,
-      author: req.userId,
+      author_Id: req.userId,
+      author:req.userData.name
     });
     res.status(201).json({ message: "Blog created successfully", blog });
   } catch (error) {
@@ -47,7 +48,7 @@ exports.updateBlog = async (req, res) => {
       return res.status(404).json({ message: "Blog not found" });
     }
     // Check if logged-in user is the author
-    if (blog.author.toString() !== req.userId) {
+    if (blog.author_Id.toString() !== req.userId) {
       return res.status(403).json({ message: "You are not authorized to update this blog." });
     }
 
