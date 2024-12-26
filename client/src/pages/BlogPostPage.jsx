@@ -1,58 +1,75 @@
-// src/pages/BlogPostPage.jsx
 import React, { useEffect, useState } from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const BlogPostPage = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Get the blog ID from the URL params
   const [blog, setBlog] = useState(null);
   const [error, setError] = useState(null);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBlog = async () => {
-      const response = await fetch(`http://localhost:3000/api/blogs/${id}`);
-      const data = await response.json();
-      setBlog(data);
+      try {
+        const response = await fetch(`http://localhost:3000/api/blogs/${id}`);
+        if (!response.ok) {
+          throw new Error("Blog not found");
+        }
+        const data = await response.json();
+        setBlog(data);
+      } catch (error) {
+        setError(error.message);
+      }
     };
     fetchBlog();
   }, [id]);
 
-  if (!blog) return <p>Loading...</p>;
+  if (!blog) return <p className="text-center mt-10 text-gray-500">Loading...</p>;
 
   const handleDelete = async () => {
+    const token = localStorage.getItem("token");
+    console.log("Token:", token);
+    console.log("Blog ID:", blog._id);
+  
+    if (!token) {
+      alert("Unauthorized: No token provided");
+      return;
+    }
+  
     try {
-      // Send the DELETE request to delete the blog
-      await axios.delete(`http://localhost:3000/api/blogs/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      const response = await axios.delete(`http://localhost:3000/api/blogs/${blog._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      navigate("/"); // Redirect to home page after deletion
+  
+      if (response.status === 200) {
+        alert("Blog deleted successfully!");
+        navigate("/");
+      }
     } catch (error) {
-      setError("Failed to delete the blog");
-      console.log(error);
+      console.error("Error deleting blog:", error.response?.data?.message || error.message);
+      alert("Failed to delete blog");
     }
   };
 
-
-  return (<>
-  
-          
-  
+  return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold">{blog.title}</h1>
-      <p className="text-gray-500 mt-2">By {blog.author}</p>
-      <div className="mt-4">
-        <p>{blog.content}</p>
-      </div>
-      <div className="mt-6">
-      <Link
+      <div className="max-w-4xl mx-auto bg-white border border-gray-200 shadow-md rounded-lg p-6">
+        <h1 className="text-3xl font-bold text-gray-800 border-b pb-4">{blog.title}</h1>
+        <p className="text-sm text-gray-500 mt-2 mb-4">By {blog.author}</p>
+        <div className="mt-4">
+          {/* Display content as rich text */}
+          <ReactQuill value={blog.content} readOnly theme="bubble" />
+        </div>
+        <div className="flex justify-between items-center mt-6">
+          <Link
             to={`/Update-blog/${blog._id}`}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition "
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
           >
             Update this Blog
           </Link>
-
           <button
             type="button"
             onClick={handleDelete}
@@ -60,12 +77,10 @@ const BlogPostPage = () => {
           >
             Delete Blog
           </button>
-
-
-          </div>
-
+        </div>
+      </div>
+      {error && <p className="text-red-500 text-center mt-4">{error}</p>}
     </div>
-    </>
   );
 };
 

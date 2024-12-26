@@ -10,6 +10,7 @@ const teamRoutes = require("./routes/teamRoute");
 const app = express();
 env.config();
 
+// Enable CORS
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -17,21 +18,25 @@ app.use(
   })
 );
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Increase payload size limits
+app.use(express.json({ limit: "10mb" })); // Adjust size as needed
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
+// Routes
 app.use("/api/users", userRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/team", teamRoutes);
 
+// Start the server
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
 
+// Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {

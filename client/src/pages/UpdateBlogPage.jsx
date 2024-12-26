@@ -1,42 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const UpdateBlog = () => {
-  const { id } = useParams(); // Get blog ID from URL params
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [blog,setBlog]=useState(null);
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(""); // Quill editor content
   const [error, setError] = useState(null);
-  
 
   useEffect(() => {
-      const fetchBlog = async () => {
+    const fetchBlog = async () => {
+      try {
         const response = await fetch(`http://localhost:3000/api/blogs/${id}`);
         const data = await response.json();
-        setBlog(data);
-      };
-      fetchBlog();
-    }, [id]);
-  
-    if (!blog) return <p>Loading...</p>;
-
+        setTitle(data.title);
+        setContent(data.content); // Initialize Quill with blog content
+      } catch (error) {
+        setError("Failed to load blog");
+      }
+    };
+    fetchBlog();
+  }, [id]);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
       await axios.put(
         `http://localhost:3000/api/blogs/${id}`,
-        { title, content,updatedAt:Date.now() },
+        { title, content, updatedAt: Date.now() },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
-      navigate(`/blog/${id}`) // Redirect to the blog details page after update
+      navigate(`/blog/${id}`); // Redirect to the blog details page after update
     } catch (error) {
       setError("Failed to update the blog");
     }
   };
-  
 
   return (
     <div className="max-w-3xl mx-auto p-4">
@@ -63,13 +64,12 @@ const UpdateBlog = () => {
           <label className="block text-lg font-medium" htmlFor="content">
             Content
           </label>
-          <textarea
+          {/* Use Quill Editor */}
+          <ReactQuill
             id="content"
             value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-            rows="8"
-            required
+            onChange={(value) => setContent(value)}
+            className="bg-white"
           />
         </div>
 

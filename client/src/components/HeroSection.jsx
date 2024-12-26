@@ -23,7 +23,7 @@ const HeroSection = () => {
           <img
             src={pclub}
             alt="PClub Logo"
-            className="w-40 h-40 md:w-52 md:h-52 lg:w-64 lg:h-64 rounded-full shadow-2xl ring-4 ring-white ring-opacity-50 hover:scale-110 transform transition-all duration-500 cursor-pointer hover:ring-2 hover:ring-pink-500"
+            className="w-40 h-40 md:w-52 md:h-52 lg:w-64 lg:h-64 rounded-full shadow-2xl ring-4  ring-opacity-50 hover:scale-110 transform transition-all duration-500 cursor-pointer hover:ring-2 hover:ring-pink-500"
           />
         </div>
       </div>

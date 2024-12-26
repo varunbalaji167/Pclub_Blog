@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";  // For email icon
-import { faInstagram, faGithub } from "@fortawesome/free-brands-svg-icons"; // For Instagram and GitHub
-import { faLinkedin } from "@fortawesome/free-brands-svg-icons"; // For LinkedIn
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faInstagram, faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import Footer from "../components/Footer";
 import axios from "axios";
 
@@ -23,34 +23,34 @@ const Contact = () => {
   }, []); 
 
   return (
-    <div className="dark:bg-black min-h-screen py-12">
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="dark:bg-black min-h-screen">
+      <div className="max-w-7xl mx-auto px-6 py-12">
         <h1 className="text-4xl font-bold text-center text-blue-600 mb-8">
-          Current Coordinators
+          Meet Our Coordinators
         </h1>
         <p className="text-lg text-center text-gray-700 dark:text-gray-300 mb-10">
-          Meet our team of dedicated coordinators. Hover over each profile to explore their social media links.
+          Meet our passionate team of coordinators. Hover over each profile to explore their social media profiles.
         </p>
 
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {teamMembers.map((member, index) => (
             <div
               key={index}
-              className="relative group bg-white dark:bg-slate-400 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition duration-300"
+              className="relative group bg-white dark:bg-slate-700 rounded-lg shadow-xl overflow-hidden hover:shadow-2xl transition duration-300 transform hover:scale-105"
             >
               {/* Profile Image */}
               <div className="flex justify-center mt-6">
                 <img
                   src={member.image}
                   alt={member.name}
-                  className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full border-4 border-pink-500 shadow-md"
+                  className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full border-4 border-pink-500 shadow-lg transition duration-300 group-hover:scale-110"
                 />
               </div>
 
               {/* Profile Details */}
               <div className="p-6 text-center">
-                <h2 className="text-xl font-semibold text-gray-800">{member.name}</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-700">{member.role}</p>
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{member.name}</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-300">{member.role}</p>
               </div>
 
               {/* Hover Overlay with Social Icons */}
@@ -58,7 +58,7 @@ const Contact = () => {
                 {member.email && (
                   <a
                     href={`mailto:${member.email}`}
-                    className="text-gray-300 hover:text-white transition"
+                    className="text-gray-300 hover:text-white transition transform hover:scale-110"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -68,7 +68,7 @@ const Contact = () => {
                 {member.instagram && (
                   <a
                     href={member.instagram}
-                    className="text-gray-300 hover:text-white transition"
+                    className="text-gray-300 hover:text-white transition transform hover:scale-110"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -78,7 +78,7 @@ const Contact = () => {
                 {member.linkedin && (
                   <a
                     href={member.linkedin}
-                    className="text-gray-300 hover:text-white transition"
+                    className="text-gray-300 hover:text-white transition transform hover:scale-110"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -88,7 +88,7 @@ const Contact = () => {
                 {member.github && (
                   <a
                     href={member.github}
-                    className="text-gray-300 hover:text-white transition"
+                    className="text-gray-300 hover:text-white transition transform hover:scale-110"
                     target="_blank"
                     rel="noopener noreferrer"
                   >

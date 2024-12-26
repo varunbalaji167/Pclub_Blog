@@ -1,68 +1,97 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import useTheme from "../hooks/useTheme";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation(); // Get current location
+  const [underlineStyle, setUnderlineStyle] = useState({});
+  const location = useLocation();
   const { theme, toggleTheme } = useTheme();
-  const token = localStorage.getItem("token"); // Check if user is logged in
+  const token = localStorage.getItem("token");
+  const linkRefs = useRef([]); // Array to hold references to links
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  // Function to determine if a link is active
+  const toggleMenu = () => setIsOpen(!isOpen);
   const isActive = (path) => location.pathname === path;
 
   const handleLogout = () => {
-    // Remove the token to log out the user
     localStorage.removeItem("token");
-    window.location.href = "/"; // Redirect to home page or login page after logout
+    window.location.href = "/";
   };
 
+  useEffect(() => {
+    // Update the underline position and width when the location changes
+    const activeLink = linkRefs.current.find(
+      (link) => link.getAttribute("href") === location.pathname
+    );
+
+    if (activeLink) {
+      setUnderlineStyle({
+        width: `${activeLink.offsetWidth}px`,
+        left: `${activeLink.offsetLeft}px`,
+      });
+    }
+  }, [location]);
+
   return (
-    <nav className="bg-white dark:bg-black shadow-md transition">
+    <nav className="bg-white dark:bg-black transition-colors duration-500 ease-in-out relative">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo Section */}
+        {/* Logo */}
         <div className="flex items-center space-x-2">
           <img
             src={`/src/assets/${theme}logo.png`}
             alt="Logo"
-            className="h-12 w-12"
+            className="h-12 w-12 transition-transform duration-200 ease-in-out hover:scale-110"
           />
         </div>
 
-        {/* Desktop Navigation Links */}
-        <div className="hidden md:flex space-x-8">
+        {/* Desktop Links */}
+        <div className="hidden md:flex space-x-8 items-center relative">
+          <div
+            className="absolute bottom-0 h-1 bg-blue-500 rounded transition-all duration-300"
+            style={underlineStyle}
+          />
           <Link
             to="/"
-            className={`py-2 text-lg font-medium transition duration-200 ${
-              isActive("/") ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700 hover:text-blue-500"
+            ref={(el) => (linkRefs.current[0] = el)}
+            className={`py-2 text-lg font-medium transition-all duration-300 ease-in-out ${
+              isActive("/")
+                ? "text-blue-500"
+                : "text-gray-700 dark:text-gray-200 hover:text-blue-500"
             }`}
           >
             Home
           </Link>
           <Link
             to="/about"
-            className={`py-2 text-lg font-medium transition duration-200 ${
-              isActive("/about") ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700 hover:text-blue-500"
+            ref={(el) => (linkRefs.current[1] = el)}
+            className={`py-2 text-lg font-medium transition-all duration-300 ease-in-out ${
+              isActive("/about")
+                ? "text-blue-500"
+                : "text-gray-700 dark:text-gray-200 hover:text-blue-500"
             }`}
           >
             About
           </Link>
           <Link
             to="/projects"
-            className={`py-2 text-lg font-medium transition duration-200 ${
-              isActive("/projects") ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700 hover:text-blue-500"
+            ref={(el) => (linkRefs.current[2] = el)}
+            className={`py-2 text-lg font-medium transition-all duration-300 ease-in-out ${
+              isActive("/projects")
+                ? "text-blue-500"
+                : "text-gray-700 dark:text-gray-200 hover:text-blue-500"
             }`}
           >
             Projects
           </Link>
           <Link
             to="/contact"
-            className={`py-2 text-lg font-medium transition duration-200 ${
-              isActive("/contact") ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700 hover:text-blue-500"
+            ref={(el) => (linkRefs.current[3] = el)}
+            className={`py-2 text-lg font-medium transition-all duration-300 ease-in-out ${
+              isActive("/contact")
+                ? "text-blue-500"
+                : "text-gray-700 dark:text-gray-200 hover:text-blue-500"
             }`}
           >
             Contact Us
@@ -72,15 +101,19 @@ const Navbar = () => {
           {token ? (
             <button
               onClick={handleLogout}
-              className="py-2 text-lg font-medium text-red-500 hover:text-red-600"
+              className="py-2 text-lg font-medium text-red-500 hover:text-red-600 transition-colors duration-300 ease-in-out"
+              aria-label="Logout"
             >
               Logout
             </button>
           ) : (
             <Link
               to="/login"
-              className={`py-2 text-lg font-medium transition duration-200 ${
-                isActive("/login") ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700 hover:text-blue-500"
+              ref={(el) => (linkRefs.current[4] = el)}
+              className={`py-2 text-lg font-medium transition-all duration-300 ease-in-out ${
+                isActive("/login")
+                  ? "text-blue-500"
+                  : "text-gray-700 dark:text-gray-200 hover:text-blue-500"
               }`}
             >
               Login
@@ -90,17 +123,25 @@ const Navbar = () => {
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded flex items-center justify-center"
+            className="p-2 rounded-full transition-colors duration-300 ease-in-out focus:outline-none"
+            aria-label="Toggle Theme"
           >
-            {theme === "dark" ? "🌞" : "🌙"}
+            <FontAwesomeIcon
+              icon={theme === "dark" ? faSun : faMoon}
+              className="text-2xl text-gray-700 dark:text-gray-200 transition-transform duration-300 ease-in-out"
+            />
           </button>
         </div>
 
-        {/* Mobile Menu Toggle Button */}
-        <div className="md:hidden">
-          <button onClick={toggleMenu} className="focus:outline-none">
+        {/* Mobile Menu Button */}
+        <div className="md:hidden flex items-center space-x-4">
+          <button
+            onClick={toggleMenu}
+            className="focus:outline-none transition-transform duration-300 ease-in-out"
+            aria-label="Toggle Menu"
+          >
             <svg
-              className="w-6 h-6 text-gray-700 dark:text-gray-100"
+              className="w-6 h-6 text-gray-700 dark:text-gray-200 transition-transform duration-300 ease-in-out"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -116,69 +157,100 @@ const Navbar = () => {
           </button>
           <button
             onClick={toggleTheme}
-            className="p-2 rounded"
+            className="p-2 rounded-full transition-all duration-300 ease-in-out"
+            aria-label="Toggle Theme"
           >
-            {theme === "dark" ? "🌞" : "🌙"}
+            <FontAwesomeIcon
+              icon={theme === "dark" ? faSun : faMoon}
+              className="text-2xl text-gray-700 dark:text-gray-200"
+            />
           </button>
+        </div>
+      </div>
 
-          {/* Mobile Menu */}
-          {isOpen && (
-            <div className="absolute top-16 right-4 bg-white border rounded-md shadow-lg z-10 w-48">
+      {/* Mobile Dropdown */}
+      {isOpen && (
+        <div className="md:hidden bg-white dark:bg-gray-900 shadow-lg rounded-xl mt-2 mx-6 py-4 z-50 transition-all duration-300 ease-in-out">
+          <ul className="space-y-2">
+            <li>
               <Link
                 to="/"
-                className={`block px-6 py-3 text-lg transition duration-200 ${
-                  isActive("/") ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"
+                onClick={toggleMenu}
+                className={`block px-6 py-3 text-lg font-semibold rounded-lg transition-all duration-300 ease-in-out ${
+                  isActive("/")
+                    ? "text-white bg-gradient-to-r from-blue-500 to-indigo-500"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                 }`}
               >
                 Home
               </Link>
+            </li>
+            <li>
               <Link
                 to="/about"
-                className={`block px-6 py-3 text-lg transition duration-200 ${
-                  isActive("/about") ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"
+                onClick={toggleMenu}
+                className={`block px-6 py-3 text-lg font-semibold rounded-lg transition-all duration-300 ease-in-out ${
+                  isActive("/about")
+                    ? "text-white bg-gradient-to-r from-blue-500 to-indigo-500"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                 }`}
               >
                 About
               </Link>
+            </li>
+            <li>
               <Link
                 to="/projects"
-                className={`block px-6 py-3 text-lg transition duration-200 ${
-                  isActive("/projects") ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"
+                onClick={toggleMenu}
+                className={`block px-6 py-3 text-lg font-semibold rounded-lg transition-all duration-300 ease-in-out ${
+                  isActive("/projects")
+                    ? "text-white bg-gradient-to-r from-blue-500 to-indigo-500"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                 }`}
               >
                 Projects
               </Link>
+            </li>
+            <li>
               <Link
                 to="/contact"
-                className={`block px-6 py-3 text-lg transition duration-200 ${
-                  isActive("/contact") ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"
+                onClick={toggleMenu}
+                className={`block px-6 py-3 text-lg font-semibold rounded-lg transition-all duration-300 ease-in-out ${
+                  isActive("/contact")
+                    ? "text-white bg-gradient-to-r from-blue-500 to-indigo-500"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                 }`}
               >
                 Contact Us
               </Link>
-
-              {/* Login/Logout in Mobile */}
-              {token ? (
+            </li>
+            {token ? (
+              <li>
                 <button
                   onClick={handleLogout}
-                  className="block px-6 py-3 text-lg text-red-500 hover:bg-gray-100"
+                  className="block w-full px-6 py-3 text-lg font-semibold text-red-500 rounded-lg transition-all duration-300 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   Logout
                 </button>
-              ) : (
+              </li>
+            ) : (
+              <li>
                 <Link
                   to="/login"
-                  className={`block px-6 py-3 text-lg transition duration-200 ${
-                    isActive("/login") ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"
+                  onClick={toggleMenu}
+                  className={`block px-6 py-3 text-lg font-semibold rounded-lg transition-all duration-300 ease-in-out ${
+                    isActive("/login")
+                      ? "text-white bg-gradient-to-r from-blue-500 to-indigo-500"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                   }`}
                 >
                   Login
                 </Link>
-              )}
-            </div>
-          )}
+              </li>
+            )}
+          </ul>
         </div>
-      </div>
+      )}
     </nav>
   );
 };
