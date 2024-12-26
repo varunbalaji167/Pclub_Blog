@@ -1,9 +1,33 @@
 // src/pages/CreateBlogPage.jsx
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import axios from "axios";
 
 const CreateBlogPage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [author, setAuthorName] = useState("");
+  const [authorId, setAuthorId] = useState("");
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://localhost:3000/user-details", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const { user } = response.data;
+        setAuthorName(user.name); // Store the user's name to display
+        setAuthorId(user._id); // Store the user's ID to send in the request
+      } catch (error) {
+        console.error("Error fetching user details:", error.response?.data?.message || error.message);
+      }
+    };
+
+    fetchUserDetails();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,8 +38,10 @@ const CreateBlogPage = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      body: JSON.stringify({ title, content }),
+      body: JSON.stringify({ title, content,author: author, 
+        author_Id: authorId }),
     });
+    
 
     if (response.ok) {
       alert("Blog created!");

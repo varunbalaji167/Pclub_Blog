@@ -8,6 +8,8 @@ import CreateBlogPage from "./pages/CreateBlogPage";
 import DashboardPage from "./pages/DashboardPage";
 import Contact from "./pages/ContactPage";
 import About from "./pages/AboutPage";
+import Login from "./pages/Login";
+import UpdateBlog from "./pages/UpdateBlogPage";
 
 const App = () => {
   return (
@@ -16,10 +18,12 @@ const App = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/blog/:id" element={<BlogPostPage />} />
-        <Route path="/create" element={<CreateBlogPage />} />
+        <Route path="/create-blog" element={<CreateBlogPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/Update-blog/:id" element={<UpdateBlog />} />
       </Routes>
     </Router>
   );
