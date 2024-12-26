@@ -6,6 +6,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation(); // Get current location
   const { theme, toggleTheme } = useTheme();
+  const token = localStorage.getItem("token"); // Check if user is logged in
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -13,6 +14,12 @@ const Navbar = () => {
 
   // Function to determine if a link is active
   const isActive = (path) => location.pathname === path;
+
+  const handleLogout = () => {
+    // Remove the token to log out the user
+    localStorage.removeItem("token");
+    window.location.href = "/"; // Redirect to home page or login page after logout
+  };
 
   return (
     <nav className="bg-white dark:bg-black shadow-md transition">
@@ -24,7 +31,6 @@ const Navbar = () => {
             alt="Logo"
             className="h-12 w-12"
           />
-          {/* <div className="text-2xl font-bold text-gray-800">PClub</div> */}
         </div>
 
         {/* Desktop Navigation Links */}
@@ -32,9 +38,7 @@ const Navbar = () => {
           <Link
             to="/"
             className={`py-2 text-lg font-medium transition duration-200 ${
-              isActive("/")
-                ? "text-blue-500 border-b-2 border-blue-500"
-                : "text-gray-700 hover:text-blue-500"
+              isActive("/") ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700 hover:text-blue-500"
             }`}
           >
             Home
@@ -42,9 +46,7 @@ const Navbar = () => {
           <Link
             to="/about"
             className={`py-2 text-lg font-medium transition duration-200 ${
-              isActive("/about")
-                ? "text-blue-500 border-b-2 border-blue-500"
-                : "text-gray-700 hover:text-blue-500"
+              isActive("/about") ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700 hover:text-blue-500"
             }`}
           >
             About
@@ -52,9 +54,7 @@ const Navbar = () => {
           <Link
             to="/projects"
             className={`py-2 text-lg font-medium transition duration-200 ${
-              isActive("/projects")
-                ? "text-blue-500 border-b-2 border-blue-500"
-                : "text-gray-700 hover:text-blue-500"
+              isActive("/projects") ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700 hover:text-blue-500"
             }`}
           >
             Projects
@@ -62,22 +62,38 @@ const Navbar = () => {
           <Link
             to="/contact"
             className={`py-2 text-lg font-medium transition duration-200 ${
-              isActive("/contact")
-                ? "text-blue-500 border-b-2 border-blue-500"
-                : "text-gray-700 hover:text-blue-500"
+              isActive("/contact") ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700 hover:text-blue-500"
             }`}
           >
             Contact Us
           </Link>
-          <div className="flex items-center space-x-4">
-            {/* Button for Theme Toggle */}
+
+          {/* Login/Logout Button */}
+          {token ? (
             <button
-              onClick={toggleTheme}
-              className="p-2 rounded  flex items-center justify-center"
+              onClick={handleLogout}
+              className="py-2 text-lg font-medium text-red-500 hover:text-red-600"
             >
-              {theme === "dark" ? "🌞" : "🌙"}
+              Logout
             </button>
-          </div>
+          ) : (
+            <Link
+              to="/login"
+              className={`py-2 text-lg font-medium transition duration-200 ${
+                isActive("/login") ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700 hover:text-blue-500"
+              }`}
+            >
+              Login
+            </Link>
+          )}
+
+          {/* Theme Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded flex items-center justify-center"
+          >
+            {theme === "dark" ? "🌞" : "🌙"}
+          </button>
         </div>
 
         {/* Mobile Menu Toggle Button */}
@@ -104,15 +120,14 @@ const Navbar = () => {
           >
             {theme === "dark" ? "🌞" : "🌙"}
           </button>
+
           {/* Mobile Menu */}
           {isOpen && (
             <div className="absolute top-16 right-4 bg-white border rounded-md shadow-lg z-10 w-48">
               <Link
                 to="/"
                 className={`block px-6 py-3 text-lg transition duration-200 ${
-                  isActive("/")
-                    ? "text-blue-500 bg-gray-100"
-                    : "text-gray-700 hover:bg-gray-100"
+                  isActive("/") ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 Home
@@ -120,9 +135,7 @@ const Navbar = () => {
               <Link
                 to="/about"
                 className={`block px-6 py-3 text-lg transition duration-200 ${
-                  isActive("/about")
-                    ? "text-blue-500 bg-gray-100"
-                    : "text-gray-700 hover:bg-gray-100"
+                  isActive("/about") ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 About
@@ -130,9 +143,7 @@ const Navbar = () => {
               <Link
                 to="/projects"
                 className={`block px-6 py-3 text-lg transition duration-200 ${
-                  isActive("/projects")
-                    ? "text-blue-500 bg-gray-100"
-                    : "text-gray-700 hover:bg-gray-100"
+                  isActive("/projects") ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 Projects
@@ -140,13 +151,30 @@ const Navbar = () => {
               <Link
                 to="/contact"
                 className={`block px-6 py-3 text-lg transition duration-200 ${
-                  isActive("/contact")
-                    ? "text-blue-500 bg-gray-100"
-                    : "text-gray-700 hover:bg-gray-100"
+                  isActive("/contact") ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 Contact Us
               </Link>
+
+              {/* Login/Logout in Mobile */}
+              {token ? (
+                <button
+                  onClick={handleLogout}
+                  className="block px-6 py-3 text-lg text-red-500 hover:bg-gray-100"
+                >
+                  Logout
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  className={`block px-6 py-3 text-lg transition duration-200 ${
+                    isActive("/login") ? "text-blue-500 bg-gray-100" : "text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  Login
+                </Link>
+              )}
             </div>
           )}
         </div>
