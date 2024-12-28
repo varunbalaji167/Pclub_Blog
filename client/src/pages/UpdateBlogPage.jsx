@@ -3,6 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { ToastContainer,toast } from "react-toastify";
+
+// Loader component (you can style this to fit your design)
+const Loader = () => (
+  <div className="loader-container">
+    <div className="loader"></div>
+  </div>
+);
 
 const UpdateBlog = () => {
   const { id } = useParams();
@@ -10,7 +18,7 @@ const UpdateBlog = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState(""); // Quill editor content
   const [error, setError] = useState(null);
-  
+  const [loading, setLoading] = useState(false); // Loading state for blog update process
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -21,6 +29,7 @@ const UpdateBlog = () => {
         setContent(data.content); // Initialize Quill with blog content
       } catch (error) {
         setError("Failed to load blog");
+        toast.error("Failer to load blog",error);
       }
     };
     fetchBlog();
@@ -28,6 +37,9 @@ const UpdateBlog = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+
+    setLoading(true); // Start loading when the request is being sent
+
     try {
       await axios.put(
         `http://localhost:3000/api/blogs/${id}`,
@@ -36,7 +48,9 @@ const UpdateBlog = () => {
       );
       navigate(`/blog/${id}`); // Redirect to the blog details page after update
     } catch (error) {
-      setError("Failed to update the blog");
+      toast.error("Failed to update blog",error);
+    } finally {
+      setLoading(false); // End loading once the request is completed
     }
   };
 
@@ -75,14 +89,20 @@ const UpdateBlog = () => {
         </div>
 
         <div className="flex space-x-4">
-          <button
-            type="submit"
-            className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Update Blog
-          </button>
+          {/* Display the loader when loading */}
+          {loading ? (
+            <Loader />
+          ) : (
+            <button
+              type="submit"
+              className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Update Blog
+            </button>
+          )}
         </div>
       </form>
+      <ToastContainer/>
     </div>
   );
 };

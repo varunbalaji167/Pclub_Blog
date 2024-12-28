@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 const useTheme = () => {
   const [theme, setTheme] = useState("light");
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");

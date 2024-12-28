@@ -5,22 +5,34 @@ import { faInstagram, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import Footer from "../components/Footer";
 import axios from "axios";
+import Loader from "../components/Loader"; // Assuming you have a Loader component
 
 const Contact = () => {
   const [teamMembers, setTeamMembers] = useState([]);
+  const [loading, setLoading] = useState(true); // Set loading to true initially
 
   useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
         const response = await axios.get("http://localhost:3000/api/team");
-        setTeamMembers(response.data); 
+        setTeamMembers(response.data);
       } catch (error) {
         console.error("Error fetching team members:", error);
+      } finally {
+        setLoading(false); // Set loading to false after data is fetched
       }
     };
 
     fetchTeamMembers();
   }, []); 
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader /> {/* Show loader while content is loading */}
+      </div>
+    );
+  }
 
   return (
     <div className="dark:bg-black min-h-screen">
