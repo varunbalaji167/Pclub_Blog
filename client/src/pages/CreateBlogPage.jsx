@@ -11,7 +11,7 @@ const CreateBlogPage = () => {
   const [content, setContent] = useState(""); // Store Quill content as HTML
   const [mediaList, setMediaList] = useState([]); // To manage inserted media
   const reactQuillRef = useRef(null); // Use useRef to store Quill reference
-
+  
   useEffect(() => {
     // Decode user details from token
     const fetchUserDetailsFromToken = () => {
@@ -162,24 +162,7 @@ const CreateBlogPage = () => {
         </button>
       </form>
 
-      {/* Media List: Show added images and videos
-      <div className="mt-4">
-        <h2 className="text-xl font-semibold mb-2">Media List</h2>
-        <ul className="list-disc pl-6">
-          {mediaList.map((media, index) => (
-            <li key={index} className="mb-2 flex items-center">
-              <span className="mr-2">{media.type === "image" ? "📸" : "🎥"}</span>
-              <span>{media.url}</span>
-              <button
-                onClick={() => deleteMedia(media.url)}
-                className="ml-4 text-red-500 hover:text-red-700"
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div> */}
+      
     </div>
   );
 };

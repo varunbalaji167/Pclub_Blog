@@ -10,6 +10,7 @@ const UpdateBlog = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState(""); // Quill editor content
   const [error, setError] = useState(null);
+  
 
   useEffect(() => {
     const fetchBlog = async () => {

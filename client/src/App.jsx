@@ -9,6 +9,8 @@ import Contact from "./pages/ContactPage";
 import About from "./pages/AboutPage";
 import Login from "./pages/Login";
 import UpdateBlog from "./pages/UpdateBlogPage";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/Update-blog/:id" element={<UpdateBlog />} />
       </Routes>
     </Router>

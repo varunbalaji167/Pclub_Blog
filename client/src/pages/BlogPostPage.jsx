@@ -10,6 +10,7 @@ const BlogPostPage = () => {
   const [blog, setBlog] = useState(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -63,6 +64,7 @@ const BlogPostPage = () => {
           {/* Display content as rich text */}
           <ReactQuill value={blog.content} readOnly theme="bubble" />
         </div>
+        {token ?(
         <div className="flex justify-between items-center mt-6">
           <Link
             to={`/Update-blog/${blog._id}`}
@@ -77,7 +79,7 @@ const BlogPostPage = () => {
           >
             Delete Blog
           </button>
-        </div>
+        </div>):null }
       </div>
       {error && <p className="text-red-500 text-center mt-4">{error}</p>}
     </div>

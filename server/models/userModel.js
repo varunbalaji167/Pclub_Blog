@@ -1,4 +1,3 @@
-// server/models/userModel.js
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
@@ -20,12 +19,11 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-  }
+  },
 });
 
-
+// Hash password only if it has been modified
 userSchema.pre("save", async function (next) {
-  // Hash password only if it has been modified
   if (this.isModified("password")) {
     try {
       const salt = await bcrypt.genSalt(10);
