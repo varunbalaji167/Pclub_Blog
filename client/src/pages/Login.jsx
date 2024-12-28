@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import Loader from "../components/Loader"; // Import the loader component
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false); // Set loading to false initially
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading when the form is submitted
     try {
       const response = await axios.post("http://localhost:3000/api/users/login", {
         email,
@@ -22,12 +27,15 @@ const Login = () => {
       localStorage.setItem("token", token);
       setUser(user);
       setMessage(message || "Login successful!");
-      navigate('/');
+      toast.success("Login successful!");
+      navigate('/'); // Redirect to home page on successful login
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "Something went wrong!";
       setMessage(errorMessage);
-      alert("You need to be a club member to login");
+      toast.error("You need to be a club member to login");
+    } finally {
+      setLoading(false); // Stop loading after API call is complete
     }
   };
 
@@ -69,6 +77,13 @@ const Login = () => {
           </button>
         </form>
 
+        
+        {loading && (
+          <div className="flex justify-center mt-4">
+            <Loader /> 
+          </div>
+        )}
+
         {message && (
           <p className="text-center mt-4 text-sm text-red-600">{message}</p>
         )}
@@ -90,6 +105,7 @@ const Login = () => {
           </Link>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

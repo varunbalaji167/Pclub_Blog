@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer,toast } from 'react-toastify';
+
+// Loader component (you can style this to fit your design)
+const Loader = () => (
+  <div className="loader-container">
+    <div className="loader"></div>
+  </div>
+);
 
 const ResetPassword = () => {
   const location = useLocation();
@@ -11,6 +19,7 @@ const ResetPassword = () => {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [token, setToken] = useState('');
+  const [loading, setLoading] = useState(false); // Loading state for password reset process
 
   // Extract token from URL path
   useEffect(() => {
@@ -27,9 +36,11 @@ const ResetPassword = () => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      setError('Passwords do not match');
+      toast.error("Password do not match");
       return;
     }
+
+    setLoading(true); // Start loading when the request is being sent
 
     try {
       const response = await axios.post(`http://localhost:3000/api/users/reset-password/${token}`, {
@@ -43,6 +54,8 @@ const ResetPassword = () => {
     } catch (err) {
       setError(err.response?.data?.message || 'Error resetting password');
       setMessage('');
+    } finally {
+      setLoading(false); // End loading once the request is completed
     }
   };
 
@@ -84,13 +97,19 @@ const ResetPassword = () => {
               className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
             />
           </div>
-          
-          <button
-            type="submit"
-            className="w-full py-3 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-          >
-            Reset Password
-          </button>
+
+          {/* Display the loader when loading */}
+          {loading ? (
+            <div className='flex justify-center items-center '>
+            <Loader /></div>
+          ) : (
+            <button
+              type="submit"
+              className="w-full py-3 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            >
+              Reset Password
+            </button>
+          )}
         </form>
         
         <div className="mt-6 text-center">
@@ -105,6 +124,7 @@ const ResetPassword = () => {
           </p>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 };
