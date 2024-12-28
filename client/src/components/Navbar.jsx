@@ -21,16 +21,17 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    // Update the underline position and width when the location changes
-    const activeLink = linkRefs.current.find(
-      (link) => link.getAttribute("href") === location.pathname
-    );
-
+    const activeLink = linkRefs.current
+      .filter((link) => link !== null) // Exclude undefined/null entries
+      .find((link) => link.getAttribute("href") === location.pathname);
+  
     if (activeLink) {
       setUnderlineStyle({
         width: `${activeLink.offsetWidth}px`,
         left: `${activeLink.offsetLeft}px`,
       });
+    } else {
+      setUnderlineStyle({}); // Reset style if no active link
     }
   }, [location]);
 
@@ -40,7 +41,7 @@ const Navbar = () => {
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <img
-            src={`/src/assets/${theme}logo.png`}
+            src={`/src/assets/${theme}club.jpeg`}
             alt="Logo"
             className="h-12 w-12 transition-transform duration-200 ease-in-out hover:scale-110"
           />
@@ -74,17 +75,7 @@ const Navbar = () => {
           >
             About
           </Link>
-          <Link
-            to="/projects"
-            ref={(el) => (linkRefs.current[2] = el)}
-            className={`py-2 text-lg font-medium transition-all duration-300 ease-in-out ${
-              isActive("/projects")
-                ? "text-blue-500"
-                : "text-gray-700 dark:text-gray-200 hover:text-blue-500"
-            }`}
-          >
-            Projects
-          </Link>
+          
           <Link
             to="/contact"
             ref={(el) => (linkRefs.current[3] = el)}
@@ -196,19 +187,6 @@ const Navbar = () => {
                 }`}
               >
                 About
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/projects"
-                onClick={toggleMenu}
-                className={`block px-6 py-3 text-lg font-semibold rounded-lg transition-all duration-300 ease-in-out ${
-                  isActive("/projects")
-                    ? "text-white bg-gradient-to-r from-blue-500 to-indigo-500"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                }`}
-              >
-                Projects
               </Link>
             </li>
             <li>

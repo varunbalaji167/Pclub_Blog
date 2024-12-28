@@ -3,15 +3,9 @@ import HeroSection from "../components/HeroSection";
 import BlogCard from "../components/BlogCard";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-
-// Loader component (you can style this to fit your design)
-const Loader = () => (
-  <div className="loader-container">
-    <div className="loader"></div>
-  </div>
-);
+import Loader from "../components/Loader";
 
 const HomePage = () => {
   const [blogs, setBlogs] = useState([]);
@@ -26,7 +20,7 @@ const HomePage = () => {
         setBlogs(data);
       } catch (error) {
         console.error("Error fetching blogs:", error);
-        toast.error("Error fetching blogs",error);
+        toast.error("Error fetching blogs", error);
       } finally {
         setLoading(false); // Set loading to false once the data is fetched
       }
@@ -35,34 +29,40 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="dark:bg-black">
+    <div className="dark:bg-black bg-white transition-all duration-700 ease-in-out">
+      {/* Hero Section */}
       <HeroSection />
-      <div className="container mx-auto p-6">
-        <h2 className="text-2xl font-bold mb-6">Latest Blogs</h2>
-
-        <div className="mt-6 mb-6">
-          {token ? (
+      
+      {/* Main Content Section */}
+      <div className="container mx-auto px-6 py-12">
+        {/* Create New Blog Button */}
+        <div className="mt-6 mb-6 flex justify-center">
+          {token && (
             <Link
               to="/create-blog"
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+              className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all duration-500 ease-in-out transform hover:scale-105"
             >
               Create New Blog
             </Link>
-          ) : null}
+          )}
         </div>
 
-        {/* Show loading spinner while the blogs are being fetched */}
+        {/* Loading Spinner */}
         {loading ? (
-          <Loader />
+          <div className="flex justify-center items-center">
+            <Loader />
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Blog Cards */}
             {blogs.map((blog) => (
               <BlogCard key={blog._id} blog={blog} />
             ))}
           </div>
         )}
       </div>
-      <ToastContainer/>
+      
+      {/* Footer Section */}
       <Footer />
     </div>
   );

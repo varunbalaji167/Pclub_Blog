@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-
-// Loader component (you can style this to fit your design)
-const Loader = () => (
-  <div className="loader-container">
-    <div className="loader"></div>
-  </div>
-);
+import Loader from '../components/Loader';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -23,10 +17,13 @@ const ForgotPassword = () => {
 
     try {
       const response = await axios.post('http://localhost:3000/api/users/forgot-password', { email });
-      toast.success(response.data.message);
+      setMessage(response.data.message);
+      toast.success(response.data.message); // Success toast
       setError('');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Error sending email');
+      const errorMessage = err.response?.data?.message || 'Error sending email';
+      setError(errorMessage);
+      toast.error(errorMessage); // Error toast
       setMessage('');
     } finally {
       setLoading(false); // Set loading to false after the request is complete
@@ -63,10 +60,10 @@ const ForgotPassword = () => {
           </button>
         </form>
 
+        {/* Optionally show success or error messages */}
         {message && <p className="mt-4 text-green-500 text-center">{message}</p>}
         {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
       </div>
-      <ToastContainer/>
     </div>
   );
 };

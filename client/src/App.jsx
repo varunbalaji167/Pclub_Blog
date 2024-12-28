@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-// import Footer from "./components/Footer";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import HomePage from "./pages/HomePage";
 import BlogPostPage from "./pages/BlogPostPage";
 import CreateBlogPage from "./pages/CreateBlogPage";
@@ -27,6 +28,17 @@ const App = () => {
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/Update-blog/:id" element={<UpdateBlog />} />
       </Routes>
+      <ToastContainer 
+          position="top-right" 
+          autoClose={5000} 
+          hideProgressBar={false} 
+          newestOnTop={false} 
+          closeOnClick 
+          rtl={false} 
+          pauseOnFocusLoss 
+          draggable 
+          pauseOnHover 
+        />
     </Router>
   );
 };

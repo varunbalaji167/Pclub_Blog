@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import Loader from "../components/Loader"; // Import the loader component
-import { ToastContainer, toast } from 'react-toastify';
+import Loader from "../components/Loader";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope, faLock, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false); // Set loading to false initially
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start loading when the form is submitted
+    setLoading(true);
     try {
       const response = await axios.post("http://localhost:3000/api/users/login", {
         email,
@@ -28,14 +31,14 @@ const Login = () => {
       setUser(user);
       setMessage(message || "Login successful!");
       toast.success("Login successful!");
-      navigate('/'); // Redirect to home page on successful login
+      navigate("/");
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "Something went wrong!";
       setMessage(errorMessage);
-      toast.error("You need to be a club member to login");
+      toast.error(errorMessage); // Display error message in toast
     } finally {
-      setLoading(false); // Stop loading after API call is complete
+      setLoading(false);
     }
   };
 
@@ -48,25 +51,50 @@ const Login = () => {
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-white">Email:</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full mt-2 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
-            />
+            <label className="block text-sm font-medium text-gray-700 dark:text-white">
+              Email:
+            </label>
+            <div className="relative">
+              <input
+                type="email"
+                value={email}
+                placeholder="ABC@iiti.ac.in"
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full mt-2 p-3 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+              />
+              <FontAwesomeIcon
+                icon={faEnvelope}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-300"
+              />
+            </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-white">Password:</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full mt-2 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
-            />
+            <label className="block text-sm font-medium text-gray-700 dark:text-white">
+              Password:
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full mt-2 p-3 pl-10 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+              />
+              <FontAwesomeIcon
+                icon={faLock}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-300"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-300 focus:outline-none"
+              >
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </button>
+            </div>
           </div>
 
           <button
@@ -77,10 +105,9 @@ const Login = () => {
           </button>
         </form>
 
-        
         {loading && (
           <div className="flex justify-center mt-4">
-            <Loader /> 
+            <Loader />
           </div>
         )}
 
@@ -105,7 +132,6 @@ const Login = () => {
           </Link>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };

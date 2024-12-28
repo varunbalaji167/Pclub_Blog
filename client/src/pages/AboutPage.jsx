@@ -7,22 +7,21 @@ const About = () => {
 
   
   useEffect(() => {
-    
     setTimeout(() => {
       setLoading(false); 
-    }, 2000); 
+    }, 500); 
   }, []);
 
   return (
-    <div className="bg-gray-100 dark:bg-black">
+    <div className="bg-gray-100 dark:bg-black transition-all duration-500 ease-in-out">
       <div className="min-h-screen">
         {loading ? (
           <div className="flex justify-center items-center min-h-screen">
             <Loader /> 
           </div>
         ) : (
-          <div className="max-w-7xl mx-auto px-6 py-12">
-            <h1 className="text-4xl font-bold text-center text-blue-600 mb-8">About Us</h1>
+          <div className="max-w-7xl mx-auto flex flex-col p-6 items-center">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-pink-500 to-red-400 drop-shadow-lg mb-6">About Us</h1>
             <div className="grid md:grid-cols-2 gap-10 items-center">
               <div className="space-y-6">
                 <h2 className="text-3xl font-semibold text-gray-800 dark:text-gray-50">Who We Are</h2>

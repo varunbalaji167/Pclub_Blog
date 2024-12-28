@@ -35,42 +35,42 @@ const Contact = () => {
   }
 
   return (
-    <div className="dark:bg-black min-h-screen">
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <h1 className="text-4xl font-bold text-center text-blue-600 mb-8">
+    <div className="dark:bg-black bg-white transition-all duration-700 ease-in-out">
+      <div className="max-w-7xl mx-auto flex flex-col items-center">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-pink-500 to-red-400 drop-shadow-lg mb-6 p-4 transition-all duration-700 ease-in-out">
           Meet Our Coordinators
         </h1>
-        <p className="text-lg text-center text-gray-700 dark:text-gray-300 mb-10">
+        <p className="text-lg text-center text-gray-700 dark:text-gray-300 p-4 mb-10 transition-all duration-700 ease-in-out">
           Meet our passionate team of coordinators. Hover over each profile to explore their social media profiles.
         </p>
 
-        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 p-4">
           {teamMembers.map((member, index) => (
             <div
               key={index}
-              className="relative group bg-white dark:bg-slate-700 rounded-lg shadow-xl overflow-hidden hover:shadow-2xl transition duration-300 transform hover:scale-105"
+              className="relative group bg-white dark:bg-slate-700 rounded-lg shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 ease-in-out transform hover:scale-105"
             >
               {/* Profile Image */}
               <div className="flex justify-center mt-6">
                 <img
                   src={member.image}
                   alt={member.name}
-                  className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full border-4 border-pink-500 shadow-lg transition duration-300 group-hover:scale-110"
+                  className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full border-4 border-pink-500 shadow-lg transition-all duration-300 group-hover:scale-110"
                 />
               </div>
 
               {/* Profile Details */}
               <div className="p-6 text-center">
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{member.name}</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-300">{member.role}</p>
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-white transition-all duration-300">{member.name}</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-300 transition-all duration-300">{member.role}</p>
               </div>
 
               {/* Hover Overlay with Social Icons */}
-              <div className="absolute inset-0 bg-blue-900 bg-opacity-75 opacity-0 group-hover:opacity-100 transition duration-300 flex justify-center items-center space-x-6">
+              <div className="absolute inset-0 bg-blue-900 bg-opacity-75 opacity-0 group-hover:opacity-100 transition-all duration-300 flex justify-center items-center space-x-6">
                 {member.email && (
                   <a
                     href={`mailto:${member.email}`}
-                    className="text-gray-300 hover:text-white transition transform hover:scale-110"
+                    className="text-gray-300 hover:text-white transition-all duration-300 transform hover:scale-110"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -80,7 +80,7 @@ const Contact = () => {
                 {member.instagram && (
                   <a
                     href={member.instagram}
-                    className="text-gray-300 hover:text-white transition transform hover:scale-110"
+                    className="text-gray-300 hover:text-white transition-all duration-300 transform hover:scale-110"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -90,7 +90,7 @@ const Contact = () => {
                 {member.linkedin && (
                   <a
                     href={member.linkedin}
-                    className="text-gray-300 hover:text-white transition transform hover:scale-110"
+                    className="text-gray-300 hover:text-white transition-all duration-300 transform hover:scale-110"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -100,7 +100,7 @@ const Contact = () => {
                 {member.github && (
                   <a
                     href={member.github}
-                    className="text-gray-300 hover:text-white transition transform hover:scale-110"
+                    className="text-gray-300 hover:text-white transition-all duration-300 transform hover:scale-110"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
